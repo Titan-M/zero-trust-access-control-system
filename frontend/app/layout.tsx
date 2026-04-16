@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Manrope, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import { Providers } from "@/components/Providers";
+import DashboardLayout from "@/components/DashboardLayout";
 
 const heading = Space_Grotesk({
   subsets: ["latin"],
@@ -26,8 +28,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${heading.variable} ${body.variable}`}>{children}</body>
+      <body className={`${heading.variable} ${body.variable}`}>
+        <Providers>
+          <DashboardLayout>
+            {children}
+          </DashboardLayout>
+        </Providers>
+      </body>
     </html>
   );
 }
-
