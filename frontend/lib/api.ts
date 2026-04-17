@@ -122,3 +122,24 @@ export function verifyMfa(params: {
   });
 }
 
+export function getUsers(token: string) {
+  return request<Array<{ id: number; username: string; role: string; hashed_password: string }>>("/admin/users", {
+    method: "GET",
+    token,
+  });
+}
+
+export function getWeights(token: string) {
+  return request<Record<string, number>>("/admin/settings/weights", {
+    method: "GET",
+    token,
+  });
+}
+
+export function updateWeights(token: string, weights: Record<string, number>) {
+  return request<{ message: string; weights: Record<string, number> }>("/admin/settings/weights", {
+    method: "POST",
+    token,
+    body: JSON.stringify(weights)
+  });
+}

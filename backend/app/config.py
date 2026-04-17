@@ -19,7 +19,7 @@ def _as_int(value: str | None, default: int) -> int:
 ENVIRONMENT = os.getenv("ZTAC_ENV", "development").strip().lower()
 IS_PRODUCTION = ENVIRONMENT == "production"
 
-DATABASE_URL = os.getenv("ZTAC_DATABASE_URL", "sqlite:///:memory:")
+DATABASE_URL = os.getenv("ZTAC_DATABASE_URL", "sqlite:///./ztac_data.db")
 SECRET_KEY = os.getenv("ZTAC_SECRET_KEY", "dev-only-change-me")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = _as_int(

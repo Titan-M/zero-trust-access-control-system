@@ -74,3 +74,68 @@ export function useAudit() {
 
   return { logs, loading, error, fetchLogs };
 }
+
+export function useUsers() {
+  const { token } = useAuth();
+  const [users, setUsers] = useState<Array<{ id: number; username: string; role: string; hashed_password: string }>>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchUsers = useCallback(async () => {
+    if (!token) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const { getUsers } = await import('./api');
+      const data = await getUsers(token);
+      setUsers(data);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to load users");
+    } finally {
+      setLoading(false);
+    }
+  }, [token]);
+
+  return { users, loading, error, fetchUsers };
+}
+
+export function useWeights() {
+  const { token } = useAuth();
+  const [weights, setWeights] = useState<Record<string, number>>({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchWeights = useCallback(async () => {
+    if (!token) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const { getWeights } = await import('./api');
+      const data = await getWeights(token);
+      setWeights(data);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to load weights");
+    } finally {
+      setLoading(false);
+    }
+  }, [token]);
+
+  const saveWeights = async (newWeights: Record<string, number>) => {
+    if (!token) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const { updateWeights } = await import('./api');
+      const res = await updateWeights(token, newWeights);
+      setWeights(res.weights);
+      return true;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to update weights");
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { weights, loading, error, fetchWeights, saveWeights, setWeights };
+}
